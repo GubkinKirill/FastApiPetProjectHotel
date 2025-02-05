@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-import jwt
+from jose import jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from pydantic import EmailStr
@@ -17,9 +17,12 @@ def verify_password(plain_password, hashed_password) -> bool:
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=30)
-    to_encode.update({'exp': expire})
+    to_encode.update({
+        'exp': expire,
+        'sub': str(data.get('sub'))  # Преобразуем в строку
+    })
     encode_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, settings.ALGORITM
+        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITM  # Проверить правильное название
     )
     return encode_jwt
 
