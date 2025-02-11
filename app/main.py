@@ -32,15 +32,3 @@ def get_hotels(
 ):
    
     return date_from, date_to
-
-
-class SBooking(BaseModel):
-    room_id: int
-    date_from: date
-    date_to: date
-
-
-
-@app.post('/bookings')
-def add_booking(booking: SBooking):
-    pass
